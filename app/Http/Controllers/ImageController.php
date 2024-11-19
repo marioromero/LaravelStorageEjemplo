@@ -40,5 +40,21 @@ class ImageController extends Controller
             'filename' => $filename,
         ]);
     }
+
+     public function showUserImages($iduser)
+    {
+        // Buscar todos los archivos que comienzan con "img{iduser}n" en el storage
+        $files = Storage::disk('public')->files('uploads');
+        $userFiles = [];
+
+        foreach ($files as $file) {
+            if (preg_match("/^uploads\/img" . $iduser . "n[0-9]+\.(jpeg|jpg|png)$/", $file)) {
+                $userFiles[] = $file;
+            }
+        }
+
+        // Pasar los archivos encontrados a la vista
+        return view('user_images', ['userFiles' => $userFiles]);
+    }
 }
 
